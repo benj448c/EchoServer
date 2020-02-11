@@ -4,6 +4,7 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace EchoServer
 {
@@ -29,17 +30,21 @@ namespace EchoServer
             }
         }
 
-        public TcpClient Start()
+        public void Start()
         {
-            TcpListener listener = new TcpListener(IPAddress.Loopback, 7);
+            TcpListener listener = new TcpListener(IPAddress.Parse("192.168.24.186"), 1337);
             listener.Start();
             Console.WriteLine("Server started");
-
-            TcpClient socket = listener.AcceptTcpClient();
-
-            Console.WriteLine("Server connected");
-
-            return socket;
+            while (true)
+            {
+                TcpClient socket = listener.AcceptTcpClient();
+                Console.WriteLine("Server connected to a client");
+                Task.Run(() =>
+                {
+                    TcpClient tempsocket = socket;
+                    DoClient(tempsocket);
+                });
+            }
         }
     }
 }
