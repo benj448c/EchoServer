@@ -11,7 +11,7 @@ namespace EchoClient
     {
         public void Start()
         {
-            TcpClient socket = new TcpClient("localhost", 7);
+            TcpClient socket = new TcpClient("localhost", 3001);
 
             using (socket)
             {
